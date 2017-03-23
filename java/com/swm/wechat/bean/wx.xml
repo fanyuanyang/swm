@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+ <sqlMap>
+     	 <!--检查淘宝用户ID对应的产品活动是否参与过  -->
+	 <statement id="checkOpenId"
+		resultClass="com.jahwa.tae.bean.Wx">	
+		select open_id as openId from wx where open_id = #openId#
+	</statement>
+	
+	 <insert id="addClick" parameterClass="com.jahwa.tae.bean.Wx">
+	    <![CDATA[   
+           insert into pingan_saoyisao (type,ip,clickTime,region) values
+           	(#type#,#ip#,now(),#region#)
+       ]]>    
+ 	 </insert>
+ 	 
+ 	 <insert id="addOpenId" parameterClass="com.jahwa.tae.bean.Wx">
+	    <![CDATA[   
+           insert into wx (open_id,mobile_phone,created) values
+           	(#openId#,#mobilePhone#,now())
+       ]]>    
+ 	 </insert>
+ 	 
+ 	  <statement id="queryWxInfo"
+		resultClass="java.lang.String">
+			select mobile_phone from wx
+		</statement> 
+ 	 	
+ 	 <statement id="queryRegion"
+		resultClass="com.jahwa.tae.bean.Wx">
+			select code as openId,name as region from region
+		</statement> 
+ 	 	<statement id="querySao"
+		parameterClass="java.util.Map"
+		resultClass="com.jahwa.tae.bean.Wx">
+			select pa.id as openId, pa.type,pa.ip,pa.clickTime as mobilePhone,r.name as region  from pingan_saoyisao pa 
+			left join region r on pa.region = r.code
+				where    <![CDATA[clickTime >= #startTime# and clickTime < #endTime#	]]>	
+					<isNotEmpty prepend="and" property="region">
+        	 			 pa.region = #region#
+        			 </isNotEmpty>
+		</statement> 
+ 	 	
+ 	   <statement id="queryIp"
+		parameterClass="java.util.Map"
+		resultClass="java.lang.String">
+		select distinct CONCAT("'",ip,"'") from pingan_saoyisao where 
+			  <![CDATA[clickTime >= #startTime# and clickTime < #endTime# and type= 'PINGAN']]>
+			  <isNotEmpty prepend="and" property="region">
+        	 			 region = #region#
+        	 </isNotEmpty>
+		</statement> 
+ 	  <statement id="queryOrder"
+		parameterClass="java.util.Map"
+		resultClass="com.jahwa.tae.bean.Order">
+	
+
+select lg.createTime as browseTime,lg.page as browsePage,lg.`user` as userId,lg.ip ip,u.realName buyer,u.spare1 spareCode,pa.`name` as spareName,so.createTime as orderCreated,so.code as orderNo,
+ IFNULL(so.totalAmount,0) as amount,  IFNULL(so.totalQuantity,0) as orderCount,
+(case when so.`status` = 0 then '创建完成，未付款'  
+when so.`status` = 1 then '付款完成,等待卖家发货'
+ when so.`status` = 2 then '卖家已发货,等待买家收货'
+ when so.`status` = 3 then '买家收货'
+ when so.`status` = 4 then '交易成功,双方互评或收货后到了指定时间'
+ when so.`status` = 5 then '买家或卖家关闭了交易' else '' end ) as orderStatus,g.code as sku,ifnull(sd.amount,0) as skuAmount,ifnull(sd.quantity ,0) as skuQuantity
+ from log_page lg left join user u on lg.`user` = u.id 
+left join pingan_agent pa on pa.`code` = u.spare1 
+left join salesorder so on lg.`user` = so.buyer
+left join salesorder_detail sd on so.id = sd.salesOrder 
+left join goods g on g.id = sd.goods
+
+      <dynamic prepend="where" >
+         <isNotEmpty prepend="and" property="startTime">
+             	         <![CDATA[
+                            (so.createTime >= #startTime#  or so.createTime is null)
+                        ]]>
+                              
+	      </isNotEmpty> 
+           <isNotEmpty prepend="and" property="endTime">
+                   <![CDATA[
+                          (so.createTime  < #endTime# or so.createTime is null)
+                    ]]>
+          </isNotEmpty> 
+          	and lg.createTime >= #startTime# 
+          <isNotEmpty prepend="and" property="ip">
+        	  lg.ip  in ($ip$)
+         </isNotEmpty> 
+        
+      </dynamic>
+   
+	</statement>
+</sqlMap> 
+

@@ -1,0 +1,148 @@
+
+<head>
+<meta name="viewport" content="width=device-width user-scalable=no initial-scale=1.0, 
+minimum-scale=1.0, maximum-scale=1.0" />
+<meta content="yes" name="apple-mobile-web-app-capable" />
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta content="black" name="apple-mobile-web-app-status-bar-style">
+    <meta content="telephone=no" name="format-detection">
+    <meta content="email=no" name="format-detection">
+<title></title>
+<link rel="stylesheet" type="text/css" href="../resources/css/style.css" />
+<script type="text/javascript" src="../resources/js/modernizr.custom.79639.js"></script>
+<noscript><link rel="stylesheet" type="text/css" href="../resources/css/noJS.css" /></noscript> 
+<script type="text/javascript"
+	src="../resources/js/jquery-1.9.1.min.js"></script>
+<link href="../resources/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+<link href="css/index.css" rel="stylesheet" type="text/css">
+<script type="text/javascript" src="../resources/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="js/index.js"></script>
+ <link rel="stylesheet" href="css/LArea.css">
+ 
+</head>
+<body>
+	<div id="is_success" style="margin-top:60%;display: none;text-align:center;font-size:17px;font-weight:bold;color:white;">
+		 感谢您莅临本次盛典<br/>我们将于近期为您配送礼品。
+	</div>
+<div id="is_show">
+	<div id="go_index" style="position:  absolute;left:25%;top:70%; ">
+		<a  href="javascript:void(0);" onclick="shows();"  class="orangellow button" style="width:180px;margin-top:4px;margin-left:4px;">领取礼品</a>
+	</div>
+		<div id="error_msg"  style="position:  absolute;left:0;top:0;margin-top:0px;display: none;width:100%;font-size:15px;font-weight:bold;" class="alert alert-warning">
+				<strong>警告！</strong>您的网络连接有问题。
+		</div>
+		<div style="text-align: center;margin-top: 160px;">
+		
+		<div id="index_view" style="display: none;">
+			<div id="channel" class="wrapper-dropdown-3" style="z-index:999;margin-bottom: 20px;" tabindex="1">
+						<span>渠道选择</span>
+						<ul class="dropdown">
+							<li><a href="#">商超渠道</a></li>
+                            <li><a href="#">专营店渠道</a></li>
+                            <li><a href="#">百货渠道</a></li>
+							<li><a href="#">媒体</a></li>
+							<li><a href="#">行业专家</a></li>
+							<li><a href="#">供应链合作伙伴</a></li>
+							<li><a href="#">其他渠道</a></li>
+						</ul>
+					</div>
+
+		<script type="text/javascript">
+			
+			function DropDown(el) {
+				this.dd = el;
+				this.placeholder = this.dd.children('span');
+				this.opts = this.dd.find('ul.dropdown > li');
+				this.val = '';
+				this.index = -1;
+				this.initEvents();
+			}
+			DropDown.prototype = {
+				initEvents : function() {
+					var obj = this;
+
+					obj.dd.on('click', function(event){
+						$(this).toggleClass('active');
+						return false;
+					});
+
+					obj.opts.on('click',function(){
+						var opt = $(this);
+						obj.val = opt.text();
+						obj.index = opt.index();
+						obj.placeholder.text(obj.val);
+					});
+				},
+				getValue : function() {
+					return this.val;
+				},
+				getIndex : function() {
+					return this.index;
+				}
+			}
+
+			$(function() {
+
+				var dd = new DropDown( $('#channel') );
+
+				$(document).click(function() {
+					// all dropdowns
+					$('.wrapper-dropdown-3').removeClass('active');
+				});
+
+			});
+
+		</script>
+		
+			<input type="text" class="form-control"  id="name" style="margin:0 auto;margin-bottom: 20px;height:42px;width:200px;"
+			   placeholder="请输入姓名">
+			<input type="text" class="form-control"  id="mobilePhone" style="margin:0 auto;margin-bottom: 20px;height:42px;width:200px;"
+			   placeholder="请输入手机号码">
+
+			  <div>
+        <div class="content-block">
+            <input id="city" type="text"  class="form-control" style="margin:0 auto;margin-bottom: 20px;height:42px;width:200px;"
+             readonly="" placeholder="请选择地址"  />
+            <input id="value1" type="hidden" value="20,234,504"/>
+            <input type="text" class="form-control"  id="address" style="margin:0 auto;margin-bottom: 0px;height:42px;width:200px;"
+			   placeholder="请输入详细地址">
+        </div>
+    </div>
+    <script src="js/LAreaData1.js"></script>
+    <script src="js/LAreaData2.js"></script>
+    <script src="js/LArea.js"></script>
+    <script>
+    var area1 = new LArea();
+    area1.init({
+        'trigger': '#city', //触发选择控件的文本框，同时选择完毕后name属性输出到该位置
+        'valueTo': '#value1', //选择完毕后id属性输出到该位置
+        'keys': {
+            id: 'id',
+            name: 'name'
+        }, //绑定数据源相关字段 id对应valueTo的value属性输出 name对应trigger的value属性输出
+        'type': 1, //数据源类型
+        'data': LAreaData //数据源
+    });
+    area1.value=[1,13,3];//控制初始位置，注意：该方法并不会影响到input的value
+    var area2 = new LArea();
+    area2.init({
+        'trigger': '#demo2',
+        'valueTo': '#value2',
+        'keys': {
+            id: 'value',
+            name: 'text'
+        },
+        'type': 2,
+        'data': [provs_data, citys_data, dists_data]
+    });
+    </script>
+			
+			<br/>
+				<a  href="javascript:void(0);" onclick="addGuest();"  class="orangellow button" style="margin:0 auto;margin-bottom: 20px;height:42px;width:200px">提交信息</a>
+			
+		</div>
+	</div>
+	</div>		
+</body>
+</html>
+

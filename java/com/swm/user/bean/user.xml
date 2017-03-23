@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+ <sqlMap>
+     <!-- 根据openId查询用户信息 -->
+	 <statement id="queryUserByOpenId" 
+		resultClass="com.swm.user.bean.User"
+		parameterClass="java.lang.String">	
+		select id,open_id as openId from User where open_id = #openId#
+	</statement>
+	
+	 <!--新增用户信息  -->
+	 <insert id="addUser" parameterClass="com.swm.user.bean.User">
+	    <![CDATA[   
+           insert into user (open_id,nick,name,gender,mobile,email,status,qq,created,last_login_ip,last_login_time) values
+           	(#openId#,#nick#,#name#,#gender#,#mobile#,#email#,0,#qq#,now(),#lastLoginIP#,now())
+       ]]>    
+ 	 </insert>
+ 	 
+ 	 <!-- 根据最后登录时间/IP修改用户信息 -->
+	 <statement id="editUserByLoginIp"
+		parameterClass="com.swm.user.bean.User">	
+		update user set last_login_ip = #lastLoginIP#,last_login_time = now() where id = #id#
+	</statement>
+</sqlMap> 
+

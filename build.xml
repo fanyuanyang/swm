@@ -1,0 +1,68 @@
+<?xml version="1.0"?>
+<project name="swm" basedir="." default="default">
+
+	<property name="tomcat.home" value="F:\apache-tomcat"/>
+	<property name="deploypath" value="${tomcat.home}\webapps"/>
+	<property name="app.name" value="swm"/>
+	
+
+	<target name="default" depends="clean,shutdown,copy_web,copy_java,copy_jar,start">
+	</target>
+	
+	<target name="clean">
+		<delete dir="${deploypath}\${app.name}"/>
+	</target>
+	
+	<target name="copy_web">
+		<copy todir = "${deploypath}\${app.name}">
+			<fileset dir="WebRoot">
+				<exclude name="WEB-INF/lib/**"/>
+			</fileset>
+		</copy>
+	</target>
+	
+	<target name="copy_java">
+		<copy todir = "${deploypath}\${app.name}\WEB-INF\classes">
+			<fileset dir="./bin">
+				<include name="**/swm/**/*.*"/>
+				<include name="log4j.properties"/>
+				<include name="struts.xml"/>
+				<include name="struts-tae.xml"/>
+				<include name="tae-default.xml"/>
+			</fileset> 
+		</copy>
+	</target>
+	
+	<target name="copy_jar">
+		<copy todir = "${deploypath}\${app.name}\WEB-INF\lib">
+			<!--  <fileset dir="lib\jdbc"/>
+			<fileset dir="lib\junit"/>
+			<fileset dir="lib\ibatis"/>
+			<fileset dir="lib\spring-struts2"/>
+			<fileset dir="lib\log4j"/>
+			<fileset dir="lib\jfreechart"/>
+			<fileset dir="lib\other"/>--><fileset dir="lib\ibatis"/><fileset dir="lib\taobao"/>
+			<fileset dir="lib\http"/>
+			<fileset dir="lib\excel"/>
+			<fileset dir="lib\spring-struts2"/>
+			
+		</copy>
+	</target>
+	 
+	<target name="start">   
+	    <exec dir="${tomcat.home}" executable="cmd.exe" >       
+	         <arg line="/c ${tomcat.home}/bin/catalina.bat jpda start" />    
+	    </exec>    
+	</target> 
+	
+	<target name="sleep">   
+		 <sleep seconds="3"/>   
+	</target> 
+	
+	<target name="shutdown">   
+	    <exec dir="${tomcat.home}"  executable="cmd.exe" >       
+	        <arg line="/c ${tomcat.home}/bin/shutdown.bat" />    
+	    </exec>    
+	</target>
+	
+</project>

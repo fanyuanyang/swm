@@ -1,0 +1,91 @@
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+	version="3.0">
+	
+  <display-name>swm</display-name>
+  <context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>WEB-INF/context/context.xml,
+					 WEB-INF/context/context-*.xml
+	    </param-value>
+  </context-param>
+  <listener>
+        <listener-class>
+			org.springframework.web.context.ContextLoaderListener
+        </listener-class>
+  </listener>
+  
+    <!-- 验证所有JSP，禁止用户非法访问JSP
+  <filter>
+  	<filter-name>systemUserFilter</filter-name>
+  	<filter-class>com.swm.common.util.SystemUserFilter</filter-class>
+  </filter>
+  <filter-mapping>
+  	<filter-name>systemUserFilter</filter-name>
+  	<url-pattern>*.do</url-pattern>
+  </filter-mapping>
+   <filter-mapping>
+  	<filter-name>systemUserFilter</filter-name>
+  	<url-pattern>*.jsp</url-pattern>
+  </filter-mapping> 
+   <filter-mapping>
+  	<filter-name>systemUserFilter</filter-name>
+  	<url-pattern>*.html</url-pattern>
+  </filter-mapping> -->
+  <!-- Spring编码集过滤器 -->
+  <filter>
+		<filter-name>Spring character encoding filter</filter-name>
+		<filter-class>
+			org.springframework.web.filter.CharacterEncodingFilter
+		</filter-class>
+		<init-param>
+			<param-name>encoding</param-name>
+			<param-value>utf-8</param-value>
+		</init-param>
+		<init-param>
+			<param-name>forceEncoding</param-name>
+			<param-value>true</param-value>
+		</init-param>
+	</filter>
+	<filter-mapping>
+		<filter-name>Spring character encoding filter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+	
+  <!-- GET方式提交乱码过滤器 -->
+	<filter>
+		<filter-name>encodingSetConversionFilter</filter-name>
+		<filter-class>com.swm.common.util.EncodingSetConversion</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>encodingSetConversionFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+	   <!-- Spring MVC-->
+    <servlet>
+        <servlet-name>SpringMVC</servlet-name>
+        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+        <init-param>
+            <param-name>contextConfigLocation</param-name>
+            <param-value>
+               WEB-INF/context/spring-mvc.xml
+            </param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>SpringMVC</servlet-name>
+        <url-pattern>/</url-pattern>
+    </servlet-mapping>
+    <!-- spring mvc end  -->
+    <session-config>
+		<session-timeout>120</session-timeout>
+	</session-config>
+    <welcome-file-list>
+     	<welcome-file>index.html</welcome-file>   
+    </welcome-file-list>
+
+</web-app>
+ 
