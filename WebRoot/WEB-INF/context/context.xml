@@ -14,7 +14,7 @@
          destroy-method="close">           
      <property name="driverClassName" value="com.mysql.jdbc.Driver" />
 		<property name="url"
-			value="jdbc:mysql://rds47wqe3k8986jy5604o.mysql.rds.aliyuncs.com:3306/saoyisao?useUnicode=true&amp;characterEncoding=utf-8" />
+			value="jdbc:mysql://localhost:3306/saoyisao?useUnicode=true&amp;characterEncoding=utf-8" />
 		<property name="username" value="saoyisao" />
 		<property name="password" value="Saoyisao2017" />
 		<!-- 连接池启动时的初始值 -->
